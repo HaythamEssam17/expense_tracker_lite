@@ -26,6 +26,8 @@ class HiveServiceProvider<T> implements ServiceProvider {
       _openBox<Map>(LocalKeys.categoryBox),
       _openBox<Map>(LocalKeys.expenseBox),
     ]);
+
+    expenseBox.clear();
   }
 
   /// Open box (lazy open)

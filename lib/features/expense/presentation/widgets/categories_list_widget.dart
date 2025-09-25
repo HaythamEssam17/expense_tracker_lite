@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/helpers/shared.dart';
 import '../../../../core/widgets/common_title_text.dart';
 import '../bloc/category_logic/category_cubit.dart';
+import '../bloc/expense_logic/expense_cubit.dart';
 
 class CategoriesListWidget extends StatelessWidget {
   const CategoriesListWidget({super.key});
@@ -19,54 +20,70 @@ class CategoriesListWidget extends StatelessWidget {
 
         return AnimatedCrossFade(
           firstChild: const SizedBox(),
-          secondChild: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              // mainAxisExtent: 90,
-            ),
-            itemCount: cubit.categories.length,
-            itemBuilder: (context, index) {
-              final item = cubit.categories[index];
-              final isSelected = cubit.selectedIndex == index;
-
-              return GestureDetector(
-                onTap: () => cubit.selectCategory(item, index),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: isSelected
-                            ? context.appColors.primaryColor
-                            : Colors.blue.withOpacity(0.1),
-                      ),
-                      child: CommonAssetSvgImageWidget(
-                        imageString: item.icon!,
-                        height: 20,
-                        width: 20,
-                        imageColor: isSelected
-                            ? context.appColors.bgWhite
-                            : context.appColors.primaryColor,
-                      ),
-                    ),
-                    getSpaceHeight(4),
-                    CommonText(
-                      item.name!,
-                      fontSize: 11,
-                      color: isSelected
-                          ? context.appColors.primaryColor
-                          : context.textColors.main,
-                      fontFamily: isSelected
-                          ? Fonts.cairoBold
-                          : Fonts.cairoRegular,
-                    ),
-                  ],
+          secondChild: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonText(
+                'Categories',
+                fontSize: 22,
+                fontFamily: Fonts.cairoSemiBold,
+              ),
+              getSpaceHeight(16),
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisExtent: 90,
                 ),
-              );
-            },
+                itemCount: cubit.categories.length,
+                itemBuilder: (context, index) {
+                  final item = cubit.categories[index];
+                  final isSelected = cubit.selectedIndex == index;
+
+                  return GestureDetector(
+                    onTap: () {
+                      cubit.selectCategory(item, index);
+
+                      context.read<ExpenseCubit>().setCategory(item.name!);
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: isSelected
+                                ? context.appColors.primaryColor
+                                : Colors.blue.withOpacity(0.1),
+                          ),
+                          child: CommonAssetSvgImageWidget(
+                            imageString: item.icon!,
+                            height: 20,
+                            width: 20,
+                            imageColor: isSelected
+                                ? context.appColors.bgWhite
+                                : context.appColors.primaryColor,
+                          ),
+                        ),
+                        getSpaceHeight(4),
+                        CommonText(
+                          item.name!,
+                          fontSize: 11,
+                          color: isSelected
+                              ? context.appColors.primaryColor
+                              : context.textColors.main,
+                          fontFamily: isSelected
+                              ? Fonts.cairoBold
+                              : Fonts.cairoRegular,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           crossFadeState: cubit.showCategories
               ? CrossFadeState.showSecond

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../common_text_form_field_widget.dart';
+import '../text_field_utils/common_text_form_field_widget.dart';
 
 class NameFormWidget extends StatelessWidget {
   final TextEditingController nameController;

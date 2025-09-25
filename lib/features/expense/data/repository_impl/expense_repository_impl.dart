@@ -86,11 +86,5 @@ class ExpenseRepository implements IExpenseRepository {
         return false;
       }
     });
-
-    // return await _hiveServiceProvider.insertWithKey(
-    //   _hiveServiceProvider.expenseBox,
-    //   expenses.id,
-    //   expenses.toJson(),
-    // );
   }
 }

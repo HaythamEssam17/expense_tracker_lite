@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../common_text_form_field_widget.dart';
+import '../text_field_utils/common_text_form_field_widget.dart';
 
 class NumberFormWidget extends StatelessWidget {
   final TextEditingController numberController;
@@ -11,6 +11,7 @@ class NumberFormWidget extends StatelessWidget {
   final int maxLines;
   final int minLines;
   final bool checkValidation;
+  final TextInputType keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final bool withSuffixIconConstraints;
 
@@ -20,6 +21,7 @@ class NumberFormWidget extends StatelessWidget {
     required this.numberOnChanged,
     this.hintKey,
     this.suffixIcon,
+    this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.minLines = 1,
     this.checkValidation = true,
@@ -32,11 +34,11 @@ class NumberFormWidget extends StatelessWidget {
     return CommonTextFormField(
       controller: numberController,
       hintKey: hintKey,
-      keyboardType: TextInputType.text,
       suffixIcon: suffixIcon,
       minLines: minLines,
       maxLines: maxLines,
       inputFormatters: inputFormatters,
+      keyboardType: keyboardType,
       withSuffixIconConstraints: withSuffixIconConstraints,
       validator: checkValidation
           ? (value) {

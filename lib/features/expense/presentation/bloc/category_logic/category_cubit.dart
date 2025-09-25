@@ -1,10 +1,7 @@
 import 'package:expense_tracker_lite/core/constants/icon_paths.dart';
-import 'package:expense_tracker_lite/core/utils/forms/utils_shared_forms.dart';
 import 'package:expense_tracker_lite/features/expense/data/models/category_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../../../../core/utils/forms/add_expense_form.dart';
 
 part 'category_states.dart';
 
@@ -14,20 +11,20 @@ class CategoryCubit extends Cubit<CategoryStates> {
 
   @override
   Future<void> close() {
-    addExpenseForm.dispose();
+    // addExpenseForm.dispose();
     return super.close();
   }
 
-  AddExpenseForm addExpenseForm = Forms.addExpense;
+  // AddExpenseForm addExpenseForm = Forms.addExpense;
 
   CategoryModel? selectedCategory;
   bool showCategories = false;
-  int selectedIndex = 0;
+  int selectedIndex = -1;
 
   void selectCategory(CategoryModel category, int index) {
     selectedCategory = category;
     selectedIndex = index;
-    addExpenseForm.categoryController.text = category.name!;
+    // addExpenseForm.categoryController.text = category.name!;
 
     emit(CategorySelected());
   }

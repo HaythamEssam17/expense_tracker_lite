@@ -1,3 +1,4 @@
+import 'package:expense_tracker_lite/core/widgets/common_title_text.dart';
 import 'package:expense_tracker_lite/features/dashboard/presentation/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,10 @@ class ExpenseListView extends StatelessWidget {
         if (state is ExpenseLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is ExpenseSuccess) {
+          if (state.expenses.isEmpty) {
+            return const Center(child: CommonText('Empty list'));
+          }
+
           return ListView.builder(
             controller: context.read<ExpenseCubit>().scrollController,
             itemCount: takeCount == 0

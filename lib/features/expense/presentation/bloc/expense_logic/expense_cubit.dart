@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../core/utils/forms/add_expense_form.dart';
+import '../../../../../core/utils/forms/utils_shared_forms.dart';
 import '../../../domain/usecases/expense_usecases.dart';
 
 part 'expense_states.dart';
@@ -12,11 +14,19 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
   final ExpenseUseCases _expenseUseCases;
   final ScrollController scrollController = ScrollController();
 
-  ExpenseCubit(this._expenseUseCases) : super(ExpenseStates()) {
+  AddExpenseForm addExpenseForm = Forms.addExpense;
+
+  ExpenseCubit(this._expenseUseCases) : super(ExpenseInit()) {
     // Init
     loadExpenses(page: 1);
 
     scrollController.addListener(_onScroll);
+  }
+
+  @override
+  Future<void> close() {
+    addExpenseForm.dispose();
+    return super.close();
   }
 
   int currentPage = 1;
@@ -24,6 +34,12 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
   bool isFetching = false;
 
   List<ExpenseModel> expenses = [];
+  ExpenseModel expense = ExpenseModel();
+
+  void setCategory(String value) {
+    addExpenseForm.categoryController.text = value;
+    emit(ExpenseInit());
+  }
 
   Future<void> loadExpenses({required int page}) async {
     if (isFetching) return;
@@ -86,6 +102,24 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
           !(state as ExpenseSuccess).isLoadingMore) {
         loadExpenses(page: currentPage + 1);
       }
+    }
+  }
+
+  void saveExpense() async {
+    emit(ExpenseLoading());
+
+    var result = await _expenseUseCases.saveExpenses(expense);
+
+    if (result) {
+      emit(
+        ExpenseSuccess(
+          expenses: expenses,
+          hasMore: false,
+          isLoadingMore: false,
+        ),
+      );
+    } else {
+      emit(ExpenseFailed("Error: Failed to save expense"));
     }
   }
 }
