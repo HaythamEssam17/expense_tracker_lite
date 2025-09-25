@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart';
-import '../helpers/shared.dart';
 import '../helpers/shared_texts.dart';
 import '../widgets/dialogs/custom_flush_bar.dart';
 
@@ -52,23 +51,26 @@ class _AppScaffoldPageState extends State<AppScaffoldPage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: BlocConsumer<ConnectivityCubit, ConnectivityState>(
           listener: (connectivityCxt, connectivityState) {
-            // if (connectivityState is InternetDisconnected) {
-            showFlushBar(
-              context: context,
-              title: 'Network disconnected',
-              message: 'Please check your internet connection',
-              color: context.appColors.blue100,
-            );
-            devLog('connectivityState: from state $connectivityState');
-            // }
+            if (connectivityState is InternetDisconnected) {
+              showFlushBar(
+                context: context,
+                title: 'Network disconnected',
+                message: 'Please check your internet connection',
+                color: context.appColors.blue100,
+              );
+            }
           },
           builder: (context, state) {
-            return GestureDetector(
-              onTap: () => context.hideKeyboard(),
-              child: SizedBox(
-                height: SharedText.screenHeight,
-                width: SharedText.screenWidth,
-                child: widget.body,
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: GestureDetector(
+                onTap: () => context.hideKeyboard(),
+                child: SizedBox(
+                  height: SharedText.screenHeight,
+                  width: SharedText.screenWidth,
+                  child: widget.body,
+                ),
               ),
             );
           },

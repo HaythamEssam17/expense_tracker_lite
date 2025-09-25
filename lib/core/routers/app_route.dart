@@ -1,9 +1,10 @@
 import 'package:expense_tracker_lite/core/routers/route_names.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/add_expense/presentation/pages/add_expense_home_page.dart';
 import '../../features/auth/presentation/pages/splash_home_page.dart';
 import '../../features/dashboard/presentation/pages/dashboard_home_page.dart';
+import '../../features/expense/presentation/pages/add_expense_home_page.dart';
+import '../features/bottom_nav_feature/presentation/pages/bottom_nav_home_page.dart';
 
 final router = GoRouter(
   initialLocation: RouteNames.splash,
@@ -22,6 +23,11 @@ final router = GoRouter(
       path: '/${RouteNames.addExpenseHomePage}',
       name: RouteNames.addExpenseHomePage,
       builder: (context, state) => const AddExpenseHomePage(),
+    ),
+    GoRoute(
+      path: '/${RouteNames.bottomNavHomePage}',
+      name: RouteNames.bottomNavHomePage,
+      builder: (context, state) => const BottomNavHomePage(),
     ),
   ],
 );

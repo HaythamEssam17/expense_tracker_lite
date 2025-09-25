@@ -24,7 +24,7 @@ class _SplashPageState extends State<SplashHomePage>
   Future goToNextPage() async {
     Timer(
       const Duration(milliseconds: 2500),
-      () => router.goNamed(RouteNames.dashboardHomePage),
+      () => router.goNamed(RouteNames.bottomNavHomePage),
     );
   }
 

@@ -15,7 +15,7 @@ class TitleSeeMoreWidget extends StatelessWidget {
         CommonText(
           'Recent Expenses',
           fontSize: 16,
-          fontFamily: Fonts.elMessiriBold,
+          fontFamily: Fonts.cairoBold,
         ),
         Material(
           color: Colors.transparent,
@@ -33,14 +33,10 @@ class TitleSeeMoreWidget extends StatelessWidget {
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    CommonText(
                       'see all',
                       textAlign: TextAlign.end,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      fontSize: 12,
                     ),
                   ],
                 ),

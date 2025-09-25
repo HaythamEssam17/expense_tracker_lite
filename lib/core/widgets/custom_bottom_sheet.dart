@@ -9,7 +9,8 @@ import '../routers/app_route.dart';
 void showBottomModalSheet({
   required BuildContext context,
   double? height,
-  required List<Widget> children,
+  // required List<Widget> children,
+  required Widget child,
   TextStyle? textStyle,
   Widget? widget,
 }) {
@@ -17,6 +18,7 @@ void showBottomModalSheet({
     context: context,
     isScrollControlled: true,
     backgroundColor: context.appColors.bgWhite,
+    elevation: 0.0,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(AppConstants.radius14),
@@ -66,7 +68,8 @@ void showBottomModalSheet({
                   ],
                 ),
                 getSpaceHeight(16),
-                ...children,
+                // ...children,
+                child,
               ],
             ),
           ),

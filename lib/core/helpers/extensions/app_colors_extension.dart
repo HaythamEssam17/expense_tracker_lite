@@ -17,6 +17,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     this.surfacesWhite4 = Colors.white,
     this.inputFillColorWhite = Colors.white,
     this.primaryColor = const Color(0xff1D55F3),
+    this.lightPrimaryColor = const Color(0xff496EF3),
     this.green100 = const Color(0xffDAF0EA),
     this.green200 = const Color(0xff00D159),
     this.green600 = const Color(0xff53DC95),
@@ -59,7 +60,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     this.grey58 = const Color(0xff959595),
     this.darkyellow = const Color(0xFFE8AB00),
     this.lightBlueF2F9FF = const Color(0xffF2F9FF),
-    this.lightGreyEEEEEF = const Color(0xffEEEEEF),
+    this.greyF5 = const Color(0xffF5F6FA),
   });
 
   final Color bgWhite;
@@ -77,6 +78,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color surfacesWhite4;
   final Color inputFillColorWhite;
   final Color primaryColor;
+  final Color lightPrimaryColor;
   final Color green100;
   final Color green200;
   final Color green600;
@@ -119,7 +121,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color grey58;
   final Color? darkyellow;
   final Color lightBlueF2F9FF;
-  final Color lightGreyEEEEEF;
+  final Color greyF5;
 
   @override
   ThemeExtension<AppColorsExtension> copyWith({
@@ -137,6 +139,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? surfacesWhite3,
     Color? surfacesWhite4,
     Color? inputFillColorWhite,
+    Color? lightPrimaryColor,
     Color? primaryColor,
     Color? green100,
     Color? green200,
@@ -181,7 +184,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? grey58,
     Color? darkyellow,
     Color? lightBlueF2F9FF,
-    Color? lightGreyEEEEEF,
+    Color? greyF5,
   }) {
     return AppColorsExtension(
       bgWhite: bgWhite ?? this.bgWhite,
@@ -199,6 +202,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       surfacesGray5: surfacesGray5 ?? this.surfacesGray5,
       inputFillColorWhite: inputFillColorWhite ?? this.inputFillColorWhite,
       primaryColor: primaryColor ?? this.primaryColor,
+      lightPrimaryColor: lightPrimaryColor ?? this.lightPrimaryColor,
       green100: green100 ?? this.green100,
       green200: green200 ?? this.green200,
       green600: green600 ?? this.green600,
@@ -241,7 +245,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       grey58: grey58 ?? this.grey58,
       darkyellow: darkyellow ?? this.darkyellow,
       lightBlueF2F9FF: lightBlueF2F9FF ?? this.lightBlueF2F9FF,
-      lightGreyEEEEEF: lightGreyEEEEEF ?? this.lightGreyEEEEEF,
+      greyF5: greyF5 ?? this.greyF5,
     );
   }
 
@@ -272,6 +276,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
         t,
       )!,
       primaryColor: Color.lerp(primaryColor, other.primaryColor, t)!,
+      lightPrimaryColor: Color.lerp(
+        lightPrimaryColor,
+        other.lightPrimaryColor,
+        t,
+      )!,
       green100: Color.lerp(green100, other.green100, t)!,
       greenDark: Color.lerp(greenDark, other.greenDark, t)!,
       green200: Color.lerp(green200, other.green200, t)!,
@@ -314,7 +323,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       grey58: Color.lerp(grey58, other.grey58, t)!,
       darkyellow: Color.lerp(darkyellow, other.darkyellow, t)!,
       lightBlueF2F9FF: Color.lerp(lightBlueF2F9FF, other.lightBlueF2F9FF, t)!,
-      lightGreyEEEEEF: Color.lerp(lightGreyEEEEEF, other.lightGreyEEEEEF, t)!,
+      greyF5: Color.lerp(greyF5, other.greyF5, t)!,
     );
   }
 }

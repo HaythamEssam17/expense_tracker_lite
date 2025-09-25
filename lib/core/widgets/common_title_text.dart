@@ -37,7 +37,7 @@ class CommonText extends StatelessWidget {
         fontSize: (fontSize ?? 14).sp,
         color: color ?? context.textColors.main,
         fontWeight: fontWeight ?? FontWeight.normal,
-        fontFamily: fontFamily ?? Fonts.elMessiriRegular,
+        fontFamily: fontFamily ?? Fonts.cairoRegular,
       ),
     );
   }

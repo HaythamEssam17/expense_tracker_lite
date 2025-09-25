@@ -148,6 +148,22 @@ flutter:
       fonts:
         - asset: assets/fonts/ElMessiri-SemiBold.ttf
 
+    - family: CairoBold
+      fonts:
+        - asset: assets/fonts/Cairo-Bold.ttf
+    - family: CairoMedium
+      fonts:
+        - asset: assets/fonts/Cairo-Light.ttf
+    - family: CairoRegular
+      fonts:
+        - asset: assets/fonts/Cairo-Regular.ttf
+    - family: CairoSemiBold
+      fonts:
+        - asset: assets/fonts/Cairo-SemiBold.ttf
+    - family: CairoExtraLight
+      fonts:
+        - asset: assets/fonts/Cairo-ExtraLight.ttf
+
 flutter_native_splash:
   color: "#F078D6"
   image: assets/images/logo.png

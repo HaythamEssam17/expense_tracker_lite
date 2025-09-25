@@ -1,6 +1,6 @@
 import 'package:expense_tracker_lite/core/helpers/extensions/context_extensions.dart';
 import 'package:expense_tracker_lite/core/helpers/extensions/num_extensions.dart';
-import 'package:expense_tracker_lite/features/dashboard/data/models/expense_model.dart';
+import 'package:expense_tracker_lite/features/expense/data/models/expense_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_constants.dart';
@@ -24,8 +24,9 @@ class ExpenseItem extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
-            offset: const Offset(0, 1),
-            blurRadius: 5,
+            offset: const Offset(0, 8),
+            blurRadius: 10,
+            spreadRadius: 3,
           ),
         ],
       ),
@@ -41,14 +42,14 @@ class ExpenseItem extends StatelessWidget {
                   CommonText(
                     'Groceries',
                     fontSize: 16,
-                    fontFamily: Fonts.elMessiriBold,
+                    fontFamily: Fonts.cairoBold,
                   ),
                   // getSpaceHeight(8),
                   const Spacer(),
                   CommonText(
                     'Manually',
                     fontSize: 12,
-                    fontFamily: Fonts.elMessiriSemiBold,
+                    fontFamily: Fonts.cairoSemiBold,
                     color: context.textColors.light,
                   ),
                 ],
@@ -60,14 +61,14 @@ class ExpenseItem extends StatelessWidget {
                 CommonText(
                   '- \$100',
                   fontSize: 16,
-                  fontFamily: Fonts.elMessiriBold,
+                  fontFamily: Fonts.cairoSemiBold,
                 ),
                 // getSpaceHeight(8),
                 const Spacer(),
                 CommonText(
                   'Today 12:00 AM',
                   fontSize: 12,
-                  fontFamily: Fonts.elMessiriSemiBold,
+                  fontFamily: Fonts.cairoSemiBold,
                   color: context.textColors.light,
                 ),
               ],

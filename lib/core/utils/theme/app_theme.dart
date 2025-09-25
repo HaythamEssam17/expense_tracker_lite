@@ -7,7 +7,7 @@ import '../../helpers/fonts.dart';
 final lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: false,
-  fontFamily: Fonts.elMessiriMedium,
+  fontFamily: Fonts.cairoMedium,
   scaffoldBackgroundColor: const Color(0xffF7F9FC),
   cardColor: Colors.white,
   dividerColor: const Color(0xffD0D0D4),
@@ -35,7 +35,8 @@ final darkTheme = lightTheme.copyWith(
       surfacesWhite3: const Color(0xff222222),
       surfacesWhite4: const Color(0xff333333),
       inputFillColorWhite: const Color(0xff1A1A1A),
-      primaryColor: const Color(0xffF078D6),
+      primaryColor: const Color(0xff1D55F3),
+      lightPrimaryColor: const Color(0xff496EF3),
       green100: const Color(0xff0F241E),
       green200: const Color(0xff00EB64),
       green600: const Color(0xff00EB64),
@@ -65,7 +66,7 @@ final darkTheme = lightTheme.copyWith(
       darkOrange: const Color(0xffFFCC1F),
       grey58: Colors.white,
       lightBlueF2F9FF: const Color(0xff333333),
-      lightGreyEEEEEF: const Color(0xff494949),
+      greyF5: const Color(0xff494949),
     ),
     TextColorsExtension(
       white: const Color(0xff101F29),

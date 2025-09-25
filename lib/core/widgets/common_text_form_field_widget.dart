@@ -64,7 +64,7 @@ class CommonTextFormField extends StatelessWidget {
             controller: controller,
             initialValue: controller == null ? initialValue : null,
             obscureText: isPassword,
-            enabled: enabled,
+            enabled: true,
             inputFormatters: inputFormatters,
             keyboardType: keyboardType,
             textInputAction: textInputAction,
@@ -77,7 +77,7 @@ class CommonTextFormField extends StatelessWidget {
                 context.textTheme.titleMedium!.copyWith(
                   fontSize: 14.sp,
                   color: context.textColors.main,
-                  fontFamily: Fonts.elMessiriRegular,
+                  fontFamily: Fonts.cairoRegular,
                 ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(
@@ -90,12 +90,12 @@ class CommonTextFormField extends StatelessWidget {
                   context.textTheme.titleMedium!.copyWith(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
-                    color: context.appColors.surfacesGray6,
-                    fontFamily: Fonts.elMessiriRegular,
+                    color: context.textColors.light,
+                    fontFamily: Fonts.cairoRegular,
                   ),
               filled: true,
               fillColor: enabled
-                  ? context.appColors.surfacesGray5
+                  ? context.appColors.greyF5
                   : context.appColors.surfacesDark,
               prefixIcon: prefixIcon,
               prefixIconColor: Colors.red,
@@ -104,9 +104,9 @@ class CommonTextFormField extends StatelessWidget {
                 maxWidth: 24.sp,
               ),
               suffixIcon: suffixIcon,
-              suffixIconConstraints: withSuffixIconConstraints
-                  ? BoxConstraints(maxHeight: 20.sp, maxWidth: 48.sp)
-                  : null,
+              // suffixIconConstraints: withSuffixIconConstraints
+              //     ? BoxConstraints(maxHeight: 24.sp, maxWidth: 48.sp)
+              //     : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

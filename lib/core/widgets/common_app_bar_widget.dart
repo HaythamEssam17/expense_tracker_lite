@@ -100,7 +100,7 @@ class AppBarWithBottomWidget extends StatelessWidget
                         title!,
                         fontSize: 16,
                         color: titleColor,
-                        fontFamily: Fonts.elMessiriSemiBold,
+                        fontFamily: Fonts.cairoSemiBold,
                       )
                     : const SizedBox.shrink(),
               ),

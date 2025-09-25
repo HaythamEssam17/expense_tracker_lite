@@ -1,7 +1,7 @@
-import 'package:expense_tracker_lite/features/add_expense/data/models/category_model.dart';
-import 'package:expense_tracker_lite/features/dashboard/data/models/expense_model.dart';
+import 'package:expense_tracker_lite/features/expense/data/models/expense_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../../../features/expense/data/models/category_model.dart';
 import '../../constants/local_keys.dart';
 import '../service_provider.dart';
 

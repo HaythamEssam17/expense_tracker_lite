@@ -33,7 +33,7 @@ class UserWelcomeMessageWidget extends StatelessWidget {
               children: [
                 CommonText(
                   DateTime.now().greeting,
-                  color: context.textColors.lightGrey,
+                  color: context.textColors.white,
                 ),
                 const Spacer(),
                 CommonText(
