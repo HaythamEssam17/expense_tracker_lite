@@ -43,4 +43,11 @@ class CategoryCubit extends Cubit<CategoryStates> {
     CategoryModel(id: 6, icon: IconPath.cartIcon, name: 'Transport'),
     CategoryModel(id: 7, icon: IconPath.rentIcon, name: 'Rent'),
   ];
+
+  List<CategoryModel> get categoriesWithAdd {
+    return [
+      ...categories,
+      CategoryModel(id: -1, icon: IconPath.addIcon, name: 'Add Category'),
+    ];
+  }
 }
