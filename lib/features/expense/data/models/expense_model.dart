@@ -27,6 +27,15 @@ class ExpenseModel extends HiveObject {
   @HiveField(6)
   String? receiptPath;
 
+  @HiveField(7)
+  String? bgColor;
+
+  @HiveField(8)
+  String? iconColor;
+
+  @HiveField(9)
+  String? icon;
+
   ExpenseModel({
     this.id,
     this.category,
@@ -35,6 +44,9 @@ class ExpenseModel extends HiveObject {
     this.usdAmount,
     this.date,
     this.receiptPath,
+    this.bgColor,
+    this.iconColor,
+    this.icon,
   });
 
   factory ExpenseModel.fromJson(Map<String, dynamic> json) =>

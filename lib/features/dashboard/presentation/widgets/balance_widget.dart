@@ -1,3 +1,4 @@
+import 'package:expense_tracker_lite/core/factories/circular_indicator_factory.dart';
 import 'package:expense_tracker_lite/core/helpers/extensions/context_extensions.dart';
 import 'package:expense_tracker_lite/core/helpers/extensions/num_extensions.dart';
 import 'package:flutter/material.dart';
@@ -6,23 +7,38 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/helpers/fonts.dart';
 import '../../../../core/helpers/shared.dart';
 import '../../../../core/widgets/common_title_text.dart';
+import '../../data/models/balance_model.dart';
 
 class BalanceCard extends StatelessWidget {
-  final String totalBalance;
-  final String income;
-  final String expense;
   final VoidCallback? onMoreTap;
+  final Future<BalanceModel> future;
 
-  const BalanceCard({
-    super.key,
-    required this.totalBalance,
-    required this.income,
-    required this.expense,
-    this.onMoreTap,
-  });
+  const BalanceCard({super.key, required this.future, this.onMoreTap});
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<BalanceModel>(
+      future: future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(
+            child: PlatformCircularIndictor.buildCircular(context: context),
+          );
+        if (!snapshot.hasData) {
+          return _buildCard(context: context, balanceModel: BalanceModel());
+        }
+
+        final balance = snapshot.data!;
+
+        return _buildCard(context: context, balanceModel: balance);
+      },
+    );
+  }
+
+  Widget _buildCard({
+    required BuildContext context,
+    required BalanceModel balanceModel,
+  }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 20.sp),
       margin: EdgeInsets.symmetric(horizontal: 16.sp),
@@ -64,7 +80,7 @@ class BalanceCard extends StatelessWidget {
 
           /// Total Balance Value
           CommonText(
-            totalBalance,
+            '\$ ${balanceModel.totalBalance}',
             color: context.textColors.white,
             fontSize: 30,
             fontFamily: Fonts.cairoBold,
@@ -79,13 +95,13 @@ class BalanceCard extends StatelessWidget {
                 context,
                 icon: Icons.arrow_downward_rounded,
                 title: "Income",
-                value: income,
+                value: '\$ ${balanceModel.incomeBalance}',
               ),
               _buildStatItem(
                 context,
                 icon: Icons.arrow_upward_rounded,
                 title: "Expense",
-                value: expense,
+                value: '\$ ${balanceModel.expenseBalance}',
               ),
             ],
           ),

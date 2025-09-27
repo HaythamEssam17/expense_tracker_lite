@@ -3,10 +3,9 @@ import 'package:expense_tracker_lite/core/network/error_handling/custom_error.da
 import 'package:expense_tracker_lite/features/expense/data/models/expense_model.dart';
 
 abstract class IExpenseRepository {
-  Future<Either<CustomError, List<ExpenseModel>>> fetchExpenses({
-    int page = 1,
-    int limit = 10,
-  });
+  Future<bool> saveExpenses(ExpenseModel expenses, {bool isExpense = false});
 
-  Future<bool> saveExpenses(ExpenseModel expenses);
+  Future<Either<CustomError, List<ExpenseModel>>> getPaginationExpenses({
+    required int page,
+  });
 }

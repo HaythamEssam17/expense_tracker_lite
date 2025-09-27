@@ -1,6 +1,7 @@
 import 'package:expense_tracker_lite/features/expense/data/models/expense_model.dart';
 import 'package:hive_flutter/adapters.dart';
 
+import '../../../features/dashboard/data/models/balance_model.dart';
 import '../../../features/expense/data/models/category_model.dart';
 import '../../constants/local_keys.dart';
 import '../service_provider.dart';
@@ -14,6 +15,7 @@ class HiveServiceProvider<T> implements ServiceProvider {
 
   Box<Map> get categoryBox => Hive.box<Map>(LocalKeys.categoryBox);
   Box<Map> get expenseBox => Hive.box<Map>(LocalKeys.expenseBox);
+  Box<Map> get balancesBox => Hive.box<Map>(LocalKeys.balancesBox);
 
   @override
   Future<void> register() async {
@@ -21,13 +23,15 @@ class HiveServiceProvider<T> implements ServiceProvider {
 
     Hive.registerAdapter(ExpenseModelAdapter());
     Hive.registerAdapter(CategoryModelAdapter());
+    Hive.registerAdapter(BalanceModelAdapter());
 
     await Future.wait([
       _openBox<Map>(LocalKeys.categoryBox),
       _openBox<Map>(LocalKeys.expenseBox),
+      _openBox<Map>(LocalKeys.balancesBox),
     ]);
 
-    // expenseBox.clear();
+    initBalanceBox();
   }
 
   /// Open box (lazy open)
@@ -42,6 +46,16 @@ class HiveServiceProvider<T> implements ServiceProvider {
     }
   }
 
+  initBalanceBox() async {
+    if (balancesBox.isEmpty) {
+      await balancesBox.put('main', {
+        "totalBalance": 0,
+        "incomeBalance": 0,
+        "expenseBalance": 0,
+      });
+    }
+  }
+
   /// Insert (auto increment key)
   Future<int> insert(Box box, T item) async {
     return await box.add(item);
@@ -50,6 +64,13 @@ class HiveServiceProvider<T> implements ServiceProvider {
   /// Insert with custom key
   Future<void> insertWithKey(Box box, dynamic key, T item) async {
     await box.put(key, item);
+  }
+
+  /// Get last counted items
+  Future<List> getLastCounted<T>(Box box, int take) async {
+    final values = box.values.toList();
+    if (values.length <= take) return values;
+    return values.sublist(values.length - take);
   }
 
   /// Get all items
@@ -67,14 +88,16 @@ class HiveServiceProvider<T> implements ServiceProvider {
     final startIndex = (page - 1) * limit;
     if (startIndex >= all.length) return [];
     final endIndex = startIndex + limit;
-    return all.sublist(
+    var list = all.sublist(
       startIndex,
       endIndex > all.length ? all.length : endIndex,
     );
+
+    return list;
   }
 
   /// Get item by key
-  Future<T?> getByKey(Box box, dynamic key) async {
+  Future<T?> getByKey<T>(Box box, dynamic key) async {
     return box.get(key);
   }
 

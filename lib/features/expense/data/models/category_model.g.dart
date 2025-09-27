@@ -45,6 +45,7 @@ CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       icon: json['icon'] as String?,
       bgColor: json['bgColor'] as String?,
+      iconColor: json['iconColor'] as String?,
     );
 
 Map<String, dynamic> _$CategoryModelToJson(CategoryModel instance) =>
@@ -53,4 +54,5 @@ Map<String, dynamic> _$CategoryModelToJson(CategoryModel instance) =>
       'name': instance.name,
       'icon': instance.icon,
       'bgColor': instance.bgColor,
+      'iconColor': instance.iconColor,
     };

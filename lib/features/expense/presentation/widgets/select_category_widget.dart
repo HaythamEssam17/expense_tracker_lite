@@ -5,8 +5,8 @@ import '../../../../core/helpers/fonts.dart';
 import '../../../../core/helpers/shared.dart';
 import '../../../../core/widgets/common_title_text.dart';
 import '../../../../core/widgets/form_input_widgets/name_form_widget.dart';
+import '../bloc/add_expense_logic/add_expense_cubit.dart';
 import '../bloc/category_logic/category_cubit.dart';
-import '../bloc/expense_logic/expense_cubit.dart';
 
 class SelectCategoryWidget extends StatelessWidget {
   const SelectCategoryWidget({super.key});
@@ -33,7 +33,7 @@ class SelectCategoryWidget extends StatelessWidget {
               child: AbsorbPointer(
                 child: NameFormWidget(
                   nameController: context
-                      .read<ExpenseCubit>()
+                      .read<AddExpenseCubit>()
                       .addExpenseForm
                       .categoryController,
                   hintKey: 'Category',

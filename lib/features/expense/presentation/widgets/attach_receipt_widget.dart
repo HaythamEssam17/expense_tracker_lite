@@ -1,5 +1,4 @@
 import 'package:expense_tracker_lite/core/helpers/extensions/context_extensions.dart';
-import 'package:expense_tracker_lite/features/expense/presentation/bloc/expense_logic/expense_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +10,7 @@ import '../../../../core/widgets/common_title_text.dart';
 import '../../../../core/widgets/common_waiting_dialog_widget.dart';
 import '../../../../core/widgets/dialogs/custom_snack_bar.dart';
 import '../../../../core/widgets/form_input_widgets/name_form_widget.dart';
+import '../bloc/add_expense_logic/add_expense_cubit.dart';
 
 class AttachReceiptWidget extends StatelessWidget {
   const AttachReceiptWidget({super.key});
@@ -53,7 +53,7 @@ class AttachReceiptWidget extends StatelessWidget {
               child: AbsorbPointer(
                 child: NameFormWidget(
                   nameController: context
-                      .read<ExpenseCubit>()
+                      .read<AddExpenseCubit>()
                       .addExpenseForm
                       .receiptController,
                   hintKey: 'Upload image',

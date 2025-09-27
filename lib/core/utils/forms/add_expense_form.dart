@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class AddExpenseForm {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final TextEditingController categoryController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController receiptController = TextEditingController();
+   TextEditingController categoryController = TextEditingController();
+   TextEditingController amountController = TextEditingController();
+   TextEditingController dateController = TextEditingController();
+   TextEditingController receiptController = TextEditingController();
 
   void dispose() {
     categoryController.dispose();

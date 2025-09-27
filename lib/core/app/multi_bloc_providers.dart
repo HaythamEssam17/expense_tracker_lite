@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../di/injection.dart';
+import '../../features/dashboard/presentation/bloc/dashboard_expense_logic/dashboard_expense_cubit.dart';
+import '../../features/expense/presentation/bloc/add_expense_logic/add_expense_cubit.dart';
 import '../../features/expense/presentation/bloc/category_logic/category_cubit.dart';
-import '../../features/expense/presentation/bloc/expense_logic/expense_cubit.dart';
+import '../../features/expense/presentation/bloc/expenses_logic/expenses_cubit.dart';
 import '../features/bottom_nav_feature/presentation/bloc/bottom_nav_cubit.dart';
 import '../features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart';
 import '../features/upload_media_featue/presentation/bloc/upload_media_cubit.dart';
@@ -25,7 +27,11 @@ class _MultiBlocProvidersPageState extends State<MultiBlocProvidersPage> {
         BlocProvider<ConnectivityCubit>(
           create: (_) => getIt<ConnectivityCubit>(),
         ),
-        BlocProvider<ExpenseCubit>(create: (_) => getIt<ExpenseCubit>()),
+        BlocProvider<AddExpenseCubit>(create: (_) => getIt<AddExpenseCubit>()),
+        BlocProvider<ExpensesCubit>(create: (_) => getIt<ExpensesCubit>()),
+        BlocProvider<DashboardExpenseCubit>(
+          create: (_) => getIt<DashboardExpenseCubit>(),
+        ),
         BlocProvider<BottomNavCubit>(create: (_) => getIt<BottomNavCubit>()),
         BlocProvider<CategoryCubit>(create: (_) => getIt<CategoryCubit>()),
         BlocProvider<UploadMediaCubit>(

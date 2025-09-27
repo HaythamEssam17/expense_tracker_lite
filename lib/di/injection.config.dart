@@ -25,6 +25,16 @@ import 'package:expense_tracker_lite/core/features/upload_media_featue/domain/us
 import 'package:expense_tracker_lite/core/features/upload_media_featue/presentation/bloc/upload_media_cubit.dart'
     as _i1062;
 import 'package:expense_tracker_lite/di/network_module.dart' as _i903;
+import 'package:expense_tracker_lite/features/dashboard/data/ds/mock_dashboard_expense_ds.dart'
+    as _i783;
+import 'package:expense_tracker_lite/features/dashboard/data/repository_impl/dashboard_expense_repository_impl.dart'
+    as _i330;
+import 'package:expense_tracker_lite/features/dashboard/domain/repository/dashboard_expense_repository.dart'
+    as _i851;
+import 'package:expense_tracker_lite/features/dashboard/domain/usecases/dashboard_expense_usecase.dart'
+    as _i964;
+import 'package:expense_tracker_lite/features/dashboard/presentation/bloc/dashboard_expense_logic/dashboard_expense_cubit.dart'
+    as _i489;
 import 'package:expense_tracker_lite/features/expense/data/ds/api_expense_ds.dart'
     as _i13;
 import 'package:expense_tracker_lite/features/expense/data/ds/mock_expense_ds.dart'
@@ -35,10 +45,12 @@ import 'package:expense_tracker_lite/features/expense/domain/repository/expense_
     as _i522;
 import 'package:expense_tracker_lite/features/expense/domain/usecases/expense_usecases.dart'
     as _i72;
+import 'package:expense_tracker_lite/features/expense/presentation/bloc/add_expense_logic/add_expense_cubit.dart'
+    as _i882;
 import 'package:expense_tracker_lite/features/expense/presentation/bloc/category_logic/category_cubit.dart'
     as _i326;
-import 'package:expense_tracker_lite/features/expense/presentation/bloc/expense_logic/expense_cubit.dart'
-    as _i557;
+import 'package:expense_tracker_lite/features/expense/presentation/bloc/expenses_logic/expenses_cubit.dart'
+    as _i618;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -53,9 +65,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i969.BottomNavCubit>(() => _i969.BottomNavCubit());
     gh.factory<_i543.ConnectivityCubit>(() => _i543.ConnectivityCubit());
     gh.factory<_i1062.UploadMediaStates>(() => _i1062.UploadMediaStates());
-    gh.factory<_i557.ExpenseStates>(() => _i557.ExpenseStates());
     gh.factory<_i326.CategoryCubit>(() => _i326.CategoryCubit());
     gh.factory<_i326.CategoryStates>(() => _i326.CategoryStates());
+    gh.factory<_i618.ExpensesStates>(() => _i618.ExpensesStates());
+    gh.factory<_i882.AddExpenseStates>(() => _i882.AddExpenseStates());
+    gh.factory<_i489.DashboardExpenseStates>(
+      () => _i489.DashboardExpenseStates(),
+    );
     gh.lazySingleton<_i895.Connectivity>(() => networkModule.connectivity);
     gh.factory<_i13.ApiExpenseDataSource>(
       () => _i13.ApiExpenseDataSourceImpl(),
@@ -63,17 +79,33 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i150.MockRemoteDataSource>(
       () => _i150.MockRemoteDataSourceImpl(),
     );
+    gh.factory<_i783.MockDashboardExpenseDatsSource>(
+      () => _i783.MockDashboardExpenseDatsSourceImpl(),
+    );
     gh.factory<_i401.UploadMediaDataSource>(
       () => _i401.UploadMediaDataSourceImpl(),
     );
     gh.factory<_i522.IExpenseRepository>(
-      () => _i598.ExpenseRepository(
+      () => _i598.ExpenseRepositoryImpl(
         gh<_i150.MockRemoteDataSource>(),
         gh<_i13.ApiExpenseDataSource>(),
       ),
     );
     gh.factory<_i493.IUploadMediaRepository>(
       () => _i899.UploadMediaRepositoryImpl(gh<_i401.UploadMediaDataSource>()),
+    );
+    gh.factory<_i851.IDashboardExpenseRepository>(
+      () => _i330.DashboardExpenseRepositoryImpl(
+        gh<_i783.MockDashboardExpenseDatsSource>(),
+      ),
+    );
+    gh.factory<_i964.DashboardExpenseUseCase>(
+      () => _i964.DashboardExpenseUseCase(
+        gh<_i851.IDashboardExpenseRepository>(),
+      ),
+    );
+    gh.factory<_i489.DashboardExpenseCubit>(
+      () => _i489.DashboardExpenseCubit(gh<_i964.DashboardExpenseUseCase>()),
     );
     gh.factory<_i1028.UploadMediaUseCase>(
       () => _i1028.UploadMediaUseCase(gh<_i493.IUploadMediaRepository>()),
@@ -84,8 +116,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i72.ExpenseUseCases>(
       () => _i72.ExpenseUseCases(gh<_i522.IExpenseRepository>()),
     );
-    gh.factory<_i557.ExpenseCubit>(
-      () => _i557.ExpenseCubit(gh<_i72.ExpenseUseCases>()),
+    gh.factory<_i618.ExpensesCubit>(
+      () => _i618.ExpensesCubit(gh<_i72.ExpenseUseCases>()),
+    );
+    gh.factory<_i882.AddExpenseCubit>(
+      () => _i882.AddExpenseCubit(gh<_i72.ExpenseUseCases>()),
     );
     return this;
   }

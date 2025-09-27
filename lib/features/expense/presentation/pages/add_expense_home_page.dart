@@ -10,7 +10,8 @@ import 'package:expense_tracker_lite/core/widgets/common_shadow_widget.dart';
 import 'package:expense_tracker_lite/core/widgets/common_title_text.dart';
 import 'package:expense_tracker_lite/core/widgets/dialogs/custom_flush_bar.dart';
 import 'package:expense_tracker_lite/core/widgets/form_input_widgets/name_form_widget.dart';
-import 'package:expense_tracker_lite/features/expense/presentation/bloc/expense_logic/expense_cubit.dart';
+import 'package:expense_tracker_lite/features/dashboard/presentation/bloc/dashboard_expense_logic/dashboard_expense_cubit.dart';
+import 'package:expense_tracker_lite/features/expense/presentation/bloc/expenses_logic/expenses_cubit.dart';
 import 'package:expense_tracker_lite/features/expense/presentation/widgets/select_category_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +22,7 @@ import '../../../../core/factories/date_picker_factory.dart';
 import '../../../../core/routers/app_route.dart';
 import '../../../../core/widgets/form_input_widgets/number_form_widget.dart';
 import '../../../../core/widgets/text_field_utils/number_input_formatter.dart';
+import '../bloc/add_expense_logic/add_expense_cubit.dart';
 import '../widgets/attach_receipt_widget.dart';
 import '../widgets/categories_list_widget.dart';
 
@@ -42,13 +44,14 @@ class AddExpenseHomePage extends StatelessWidget {
           fontFamily: Fonts.cairoSemiBold,
         ),
       ),
-      body: BlocConsumer<ExpenseCubit, ExpenseStates>(
+      body: BlocConsumer<AddExpenseCubit, AddExpenseStates>(
         listener: (context, state) {
-          if (state is ExpenseAddedSuccess) {
+          if (state is AddExpenseAddedSuccess) {
             router.pop();
 
-            context.read<ExpenseCubit>().loadExpenses();
-          } else if (state is ExpenseAddedFailed) {
+            context.read<DashboardExpenseCubit>().getExpensesList();
+            BlocProvider.of<ExpensesCubit>(context).getExpensesList();
+          } else if (state is AddExpenseAddedFailed) {
             router.pop();
             showFlushBar(
               context: context,
@@ -58,7 +61,7 @@ class AddExpenseHomePage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          final cubit = context.read<ExpenseCubit>();
+          final cubit = context.read<AddExpenseCubit>();
 
           return Form(
             key: cubit.addExpenseForm.formKey,
@@ -86,19 +89,18 @@ class AddExpenseHomePage extends StatelessWidget {
                                 numberController:
                                     cubit.addExpenseForm.amountController,
                                 hintKey: '\$ 50,000',
-                                keyboardType: TextInputType.number,
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                      decimal: true,
+                                    ),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(
                                     RegExp(r'[0-9,]'),
                                   ),
-                                  FilteringTextInputFormatter.digitsOnly,
                                   NumberInputFormatter(),
                                 ],
                                 numberOnChanged: (value) {
-                                  cubit.expense.amount = double.tryParse(
-                                    value!,
-                                  );
-                                  cubit.setAmount(value);
+                                  cubit.setAmount(value!);
                                   return value;
                                 },
                               ),
@@ -125,8 +127,6 @@ class AddExpenseHomePage extends StatelessWidget {
                                     String formattedDate = DateFormat(
                                       'MM/dd/yyyy',
                                     ).format(date);
-                                    cubit.addExpenseForm.dateController.text =
-                                        formattedDate;
 
                                     cubit.setDate(formattedDate);
                                   });
@@ -166,11 +166,11 @@ class AddExpenseHomePage extends StatelessWidget {
                   widget: CommonGlobalButton(
                     buttonText: 'Save',
                     onPressedFunction: () {
-                      cubit.saveExpense();
+                      cubit.saveExpense(isExpense: true);
                     },
                     radius: AppConstants.radius10,
                     buttonTextSize: 18,
-                    isLoading: state is ExpenseLoading,
+                    isLoading: state is AddExpenseLoading,
                     buttonBackgroundColor: context.appColors.primaryColor,
                   ),
                 ),

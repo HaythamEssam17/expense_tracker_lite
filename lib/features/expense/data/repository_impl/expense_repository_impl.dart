@@ -9,33 +9,26 @@ import '../ds/api_expense_ds.dart';
 import '../ds/mock_expense_ds.dart';
 
 @Injectable(as: IExpenseRepository)
-class ExpenseRepository implements IExpenseRepository {
+class ExpenseRepositoryImpl implements IExpenseRepository {
   final MockRemoteDataSource _mockRemoteDataSource;
   final ApiExpenseDataSource _apiExpenseDataSource;
   final HiveServiceProvider _hiveServiceProvider = HiveServiceProvider.i;
 
-  ExpenseRepository(this._mockRemoteDataSource, this._apiExpenseDataSource);
+  ExpenseRepositoryImpl(this._mockRemoteDataSource, this._apiExpenseDataSource);
 
   @override
-  Future<Either<CustomError, List<ExpenseModel>>> fetchExpenses({
-    int page = 1,
-    int limit = 10,
+  Future<Either<CustomError, List<ExpenseModel>>> getPaginationExpenses({
+    required int page,
   }) async {
     // Check if local data is available
-    final localExpenses = await _hiveServiceProvider
-        .getAllPagination<ExpenseModel>(
-          _hiveServiceProvider.expenseBox,
-          page: page,
-          limit: limit,
-        );
+    final localExpenses = await _mockRemoteDataSource.getPaginationExpenses(
+      page: page,
+    );
 
     if (localExpenses.isNotEmpty) {
-      // Handle pagination
-      List<ExpenseModel> expenses = localExpenses
-          .map((e) => ExpenseModel.fromJson((e as Map).cast<String, dynamic>()))
-          .toList();
+      await Future.delayed(const Duration(seconds: 3));
 
-      return right(expenses);
+      return right(localExpenses);
     } else {
       final result = await _apiExpenseDataSource.fetchExpenses();
 
@@ -73,22 +66,45 @@ class ExpenseRepository implements IExpenseRepository {
   }
 
   @override
-  Future<bool> saveExpenses(ExpenseModel expenses) async {
+  Future<bool> saveExpenses(
+    ExpenseModel expenses, {
+    bool isExpense = false,
+  }) async {
     return await _apiExpenseDataSource.addExpense(expenses).then((value) async {
       if (value.isRight() && value.getOrElse(() => false)) {
         await _hiveServiceProvider.insert(
           _hiveServiceProvider.expenseBox,
           expenses.toJson(),
         );
-
-        var list = await _hiveServiceProvider.getAll(
-          _hiveServiceProvider.expenseBox,
-        );
-        print('list: $list');
+        // await addExpense(expenses);
+        await addBalances(expenses.amount ?? 10.0, isExpense: isExpense);
         return true;
       } else {
         return false;
       }
     });
+  }
+
+  Future<void> addBalances(double amount, {bool isExpense = false}) async {
+    var currentBalance = await _hiveServiceProvider.getByKey(
+      _hiveServiceProvider.balancesBox,
+      'main',
+    );
+
+    if (isExpense) {
+      final absAmount = amount.abs();
+      currentBalance['expenseBalance'] += absAmount;
+      currentBalance['totalBalance'] -= absAmount;
+    } else {
+      currentBalance['incomeBalance'] += amount;
+      currentBalance['totalBalance'] += amount;
+    }
+
+    await _hiveServiceProvider
+        .insertWithKey(_hiveServiceProvider.balancesBox, "main", {
+          "totalBalance": currentBalance['totalBalance'],
+          "expenseBalance": currentBalance['expenseBalance'],
+          "incomeBalance": currentBalance['incomeBalance'],
+        });
   }
 }

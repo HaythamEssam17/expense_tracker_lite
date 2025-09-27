@@ -1,4 +1,5 @@
 import 'package:expense_tracker_lite/core/helpers/extensions/context_extensions.dart';
+import 'package:expense_tracker_lite/core/helpers/extensions/string_extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/helpers/fonts.dart';
@@ -31,7 +32,7 @@ class CategoryItem extends StatelessWidget {
               shape: BoxShape.circle,
               color: isSelected
                   ? context.appColors.primaryColor
-                  : Colors.blue.withOpacity(0.1),
+                  : item.bgColor!.toColor(),
             ),
             child: CommonAssetSvgImageWidget(
               imageString: item.icon!,
@@ -39,7 +40,7 @@ class CategoryItem extends StatelessWidget {
               width: 20,
               imageColor: isSelected
                   ? context.appColors.bgWhite
-                  : context.appColors.primaryColor,
+                  : item.iconColor?.toColor(),
             ),
           ),
           getSpaceHeight(4),

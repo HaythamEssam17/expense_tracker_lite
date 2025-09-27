@@ -47,6 +47,9 @@ ExpenseModel _$ExpenseModelFromJson(Map<String, dynamic> json) => ExpenseModel(
   usdAmount: (json['usdAmount'] as num?)?.toDouble(),
   date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
   receiptPath: json['receiptPath'] as String?,
+  bgColor: json['bgColor'] as String?,
+  iconColor: json['iconColor'] as String?,
+  icon: json['icon'] as String?,
 );
 
 Map<String, dynamic> _$ExpenseModelToJson(ExpenseModel instance) =>
@@ -58,4 +61,7 @@ Map<String, dynamic> _$ExpenseModelToJson(ExpenseModel instance) =>
       'usdAmount': instance.usdAmount,
       'date': instance.date?.toIso8601String(),
       'receiptPath': instance.receiptPath,
+      'bgColor': instance.bgColor,
+      'iconColor': instance.iconColor,
+      'icon': instance.icon,
     };

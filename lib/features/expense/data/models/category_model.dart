@@ -18,7 +18,10 @@ class CategoryModel extends HiveObject {
   @HiveField(3)
   String? bgColor;
 
-  CategoryModel({this.id, this.name, this.icon, this.bgColor});
+  @HiveField(4)
+  String? iconColor;
+
+  CategoryModel({this.id, this.name, this.icon, this.bgColor, this.iconColor});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);

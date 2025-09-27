@@ -17,4 +17,6 @@ class IconPath {
   static String shoppingIcon = "shopping.svg";
   static String newsIcon = "news.svg";
   static String addIcon = "add.svg";
+  static String emptyIcon = "empty.svg";
+  static String shimmerIcon = "shimmer.gif";
 }

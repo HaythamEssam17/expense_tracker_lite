@@ -1,5 +1,7 @@
+import 'package:expense_tracker_lite/core/features/bottom_nav_feature/presentation/bloc/bottom_nav_cubit.dart';
 import 'package:expense_tracker_lite/core/helpers/extensions/num_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/helpers/fonts.dart';
 import '../../../../core/widgets/common_title_text.dart';
@@ -27,7 +29,7 @@ class TitleSeeMoreWidget extends StatelessWidget {
             ),
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
-              onTap: () {},
+              onTap: () => context.read<BottomNavCubit>().changePage(1),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.sp),
                 child: const Row(

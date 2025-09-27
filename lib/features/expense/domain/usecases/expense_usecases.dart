@@ -11,14 +11,16 @@ class ExpenseUseCases {
 
   ExpenseUseCases(this._expenseRepository);
 
-  Future<Either<CustomError, List<ExpenseModel>>> fetchExpenses({
-    int page = 1,
-    int limit = 10,
+  Future<bool> saveExpenses(
+    ExpenseModel expenses, {
+    bool isExpense = false,
   }) async {
-    return await _expenseRepository.fetchExpenses(page: 1, limit: 10);
+    return _expenseRepository.saveExpenses(expenses, isExpense: isExpense);
   }
 
-  Future<bool> saveExpenses(ExpenseModel expenses) async {
-    return _expenseRepository.saveExpenses(expenses);
+  Future<Either<CustomError, List<ExpenseModel>>> getPaginationExpenses({
+    required int page,
+  }) async {
+    return await _expenseRepository.getPaginationExpenses(page: page);
   }
 }

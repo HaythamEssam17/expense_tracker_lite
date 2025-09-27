@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/helpers/shared.dart';
 import '../../../../core/widgets/common_title_text.dart';
+import '../bloc/add_expense_logic/add_expense_cubit.dart';
 import '../bloc/category_logic/category_cubit.dart';
-import '../bloc/expense_logic/expense_cubit.dart';
 import 'add_new_category_item.dart';
 
 class CategoriesListWidget extends StatelessWidget {
@@ -51,7 +51,7 @@ class CategoriesListWidget extends StatelessWidget {
                       onTap: () {
                         cubit.selectCategory(item, index);
 
-                        context.read<ExpenseCubit>().setCategory(item.name!);
+                        context.read<AddExpenseCubit>().setCategory(item);
                       },
                       isSelected: isSelected,
                       item: item,

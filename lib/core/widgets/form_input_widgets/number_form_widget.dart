@@ -44,8 +44,6 @@ class NumberFormWidget extends StatelessWidget {
           ? (value) {
               if (value!.isEmpty) {
                 return 'Empty field.';
-              } else if (value.length < 2) {
-                return 'Length must be more than 2 chars.';
               } else {
                 return null;
               }
