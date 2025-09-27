@@ -14,6 +14,16 @@ import 'package:expense_tracker_lite/core/features/bottom_nav_feature/presentati
     as _i969;
 import 'package:expense_tracker_lite/core/features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart'
     as _i543;
+import 'package:expense_tracker_lite/core/features/upload_media_featue/data/datasource/upload_file_data_source.dart'
+    as _i401;
+import 'package:expense_tracker_lite/core/features/upload_media_featue/data/repository/upload_media_repository_impl.dart'
+    as _i899;
+import 'package:expense_tracker_lite/core/features/upload_media_featue/domain/repository/upload_media_repository.dart'
+    as _i493;
+import 'package:expense_tracker_lite/core/features/upload_media_featue/domain/usecase/upload_media_usecase.dart'
+    as _i1028;
+import 'package:expense_tracker_lite/core/features/upload_media_featue/presentation/bloc/upload_media_cubit.dart'
+    as _i1062;
 import 'package:expense_tracker_lite/di/network_module.dart' as _i903;
 import 'package:expense_tracker_lite/features/expense/data/ds/api_expense_ds.dart'
     as _i13;
@@ -40,11 +50,12 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final networkModule = _$NetworkModule();
-    gh.factory<_i543.ConnectivityCubit>(() => _i543.ConnectivityCubit());
     gh.factory<_i969.BottomNavCubit>(() => _i969.BottomNavCubit());
+    gh.factory<_i543.ConnectivityCubit>(() => _i543.ConnectivityCubit());
+    gh.factory<_i1062.UploadMediaStates>(() => _i1062.UploadMediaStates());
+    gh.factory<_i557.ExpenseStates>(() => _i557.ExpenseStates());
     gh.factory<_i326.CategoryCubit>(() => _i326.CategoryCubit());
     gh.factory<_i326.CategoryStates>(() => _i326.CategoryStates());
-    gh.factory<_i557.ExpenseStates>(() => _i557.ExpenseStates());
     gh.lazySingleton<_i895.Connectivity>(() => networkModule.connectivity);
     gh.factory<_i13.ApiExpenseDataSource>(
       () => _i13.ApiExpenseDataSourceImpl(),
@@ -52,11 +63,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i150.MockRemoteDataSource>(
       () => _i150.MockRemoteDataSourceImpl(),
     );
+    gh.factory<_i401.UploadMediaDataSource>(
+      () => _i401.UploadMediaDataSourceImpl(),
+    );
     gh.factory<_i522.IExpenseRepository>(
       () => _i598.ExpenseRepository(
         gh<_i150.MockRemoteDataSource>(),
         gh<_i13.ApiExpenseDataSource>(),
       ),
+    );
+    gh.factory<_i493.IUploadMediaRepository>(
+      () => _i899.UploadMediaRepositoryImpl(gh<_i401.UploadMediaDataSource>()),
+    );
+    gh.factory<_i1028.UploadMediaUseCase>(
+      () => _i1028.UploadMediaUseCase(gh<_i493.IUploadMediaRepository>()),
+    );
+    gh.factory<_i1062.UploadMediaCubit>(
+      () => _i1062.UploadMediaCubit(gh<_i1028.UploadMediaUseCase>()),
     );
     gh.factory<_i72.ExpenseUseCases>(
       () => _i72.ExpenseUseCases(gh<_i522.IExpenseRepository>()),

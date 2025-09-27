@@ -18,7 +18,7 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
 
   ExpenseCubit(this._expenseUseCases) : super(ExpenseInit()) {
     // Init
-    loadExpenses(page: 1);
+    loadExpenses();
 
     scrollController.addListener(_onScroll);
   }
@@ -38,10 +38,58 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
 
   void setCategory(String value) {
     addExpenseForm.categoryController.text = value;
+    expense.category = value;
     emit(ExpenseInit());
   }
 
-  Future<void> loadExpenses({required int page}) async {
+  void setAmount(String value) {
+    addExpenseForm.amountController.text = value;
+    expense.amount = 1000;
+    emit(ExpenseInit());
+  }
+
+  void setDate(String value) {
+    addExpenseForm.dateController.text = value;
+    expense.date = DateTime.now();
+    emit(ExpenseInit());
+  }
+
+  void setAttachImage(String value) {
+    addExpenseForm.receiptController.text = value;
+    expense.receiptPath = value;
+    emit(ExpenseInit());
+  }
+
+  Future<void> loadExpenses() async {
+    expenses.clear();
+    emit(ExpenseLoading());
+
+    try {
+      final result = await _expenseUseCases.fetchExpenses();
+
+      result.fold(
+        (l) {
+          emit(ExpenseFailed("Error: ${l.errorMassage!}"));
+        },
+        (r) {
+          expenses = r;
+          emit(
+            ExpenseSuccess(
+              expenses: expenses,
+              hasMore: false,
+              isLoadingMore: false,
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      emit(ExpenseFailed("Error: $e"));
+    } finally {
+      isFetching = false;
+    }
+  }
+
+  Future<void> loadPaginatedExpenses({required int page}) async {
     if (isFetching) return;
     isFetching = true;
 
@@ -100,26 +148,22 @@ class ExpenseCubit extends Cubit<ExpenseStates> {
       if (state is ExpenseSuccess &&
           (state as ExpenseSuccess).hasMore &&
           !(state as ExpenseSuccess).isLoadingMore) {
-        loadExpenses(page: currentPage + 1);
+        loadPaginatedExpenses(page: currentPage + 1);
       }
     }
   }
 
   void saveExpense() async {
-    emit(ExpenseLoading());
+    if (addExpenseForm.formKey.currentState!.validate()) {
+      emit(ExpenseLoading());
 
-    var result = await _expenseUseCases.saveExpenses(expense);
+      var result = await _expenseUseCases.saveExpenses(expense);
 
-    if (result) {
-      emit(
-        ExpenseSuccess(
-          expenses: expenses,
-          hasMore: false,
-          isLoadingMore: false,
-        ),
-      );
-    } else {
-      emit(ExpenseFailed("Error: Failed to save expense"));
+      if (result) {
+        emit(ExpenseAddedSuccess());
+      } else {
+        emit(ExpenseAddedFailed("Error: Failed to save expense"));
+      }
     }
   }
 }

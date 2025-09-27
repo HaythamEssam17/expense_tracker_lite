@@ -57,7 +57,7 @@ class IOSDatePicker implements DatePickerFactory {
               mode: CupertinoDatePickerMode.date,
               initialDateTime: now,
               minimumDate: DateTime(2000),
-              maximumDate: DateTime(2100),
+              maximumDate: DateTime.now(),
               onDateTimeChanged: onDateTimeChanged,
             ),
           ),

@@ -76,11 +76,15 @@ class ExpenseRepository implements IExpenseRepository {
   Future<bool> saveExpenses(ExpenseModel expenses) async {
     return await _apiExpenseDataSource.addExpense(expenses).then((value) async {
       if (value.isRight() && value.getOrElse(() => false)) {
-        await _hiveServiceProvider.insertWithKey(
+        await _hiveServiceProvider.insert(
           _hiveServiceProvider.expenseBox,
-          expenses.id,
           expenses.toJson(),
         );
+
+        var list = await _hiveServiceProvider.getAll(
+          _hiveServiceProvider.expenseBox,
+        );
+        print('list: $list');
         return true;
       } else {
         return false;

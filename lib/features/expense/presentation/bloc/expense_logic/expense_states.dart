@@ -7,6 +7,13 @@ class ExpenseInit extends ExpenseStates {}
 
 class ExpenseLoading extends ExpenseStates {}
 
+class ExpenseAddedSuccess extends ExpenseStates {}
+
+class ExpenseAddedFailed extends ExpenseStates {
+  final String errorMessage;
+  ExpenseAddedFailed(this.errorMessage);
+}
+
 class ExpenseSuccess extends ExpenseStates {
   final List<ExpenseModel> expenses;
   final bool hasMore;
