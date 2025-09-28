@@ -15,6 +15,16 @@ import 'package:expense_tracker_lite/core/features/bottom_nav_feature/presentati
     as _i969;
 import 'package:expense_tracker_lite/core/features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart'
     as _i543;
+import 'package:expense_tracker_lite/core/features/export_files_feature/data/ds/export_ds.dart'
+    as _i368;
+import 'package:expense_tracker_lite/core/features/export_files_feature/data/export_repository/export_repository_impl.dart'
+    as _i709;
+import 'package:expense_tracker_lite/core/features/export_files_feature/domain/repository/export_repository.dart'
+    as _i402;
+import 'package:expense_tracker_lite/core/features/export_files_feature/domain/usecase/export_usecase.dart'
+    as _i167;
+import 'package:expense_tracker_lite/core/features/export_files_feature/presentation/bloc/export_cubit.dart'
+    as _i913;
 import 'package:expense_tracker_lite/core/features/upload_media_featue/data/datasource/upload_file_data_source.dart'
     as _i401;
 import 'package:expense_tracker_lite/core/features/upload_media_featue/data/repository/upload_media_repository_impl.dart'
@@ -69,15 +79,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i969.BottomNavCubit>(() => _i969.BottomNavCubit());
     gh.factory<_i543.ConnectivityCubit>(() => _i543.ConnectivityCubit());
     gh.factory<_i1062.UploadMediaStates>(() => _i1062.UploadMediaStates());
+    gh.factory<_i882.AddExpenseStates>(() => _i882.AddExpenseStates());
     gh.factory<_i326.CategoryCubit>(() => _i326.CategoryCubit());
     gh.factory<_i326.CategoryStates>(() => _i326.CategoryStates());
     gh.factory<_i618.ExpensesStates>(() => _i618.ExpensesStates());
-    gh.factory<_i882.AddExpenseStates>(() => _i882.AddExpenseStates());
     gh.factory<_i489.DashboardExpenseStates>(
       () => _i489.DashboardExpenseStates(),
     );
     gh.lazySingleton<_i895.Connectivity>(() => networkModule.connectivity);
     gh.lazySingleton<_i361.Dio>(() => registerModule.dio());
+    gh.factory<_i913.ExportState>(
+      () => _i913.ExportState(
+        isLoading: gh<bool>(),
+        filePath: gh<String>(),
+        error: gh<String>(),
+      ),
+    );
     gh.factory<_i13.ApiExpenseDataSource>(
       () => _i13.ApiExpenseDataSourceImpl(),
     );
@@ -93,10 +110,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i401.UploadMediaDataSource>(
       () => _i401.UploadMediaDataSourceImpl(),
     );
+    gh.factory<_i368.ExpenseExportDataSource>(
+      () => _i368.ExpenseExportDataSourceImpl(),
+    );
     gh.factory<_i522.IExpenseRepository>(
       () => _i598.ExpenseRepositoryImpl(
         gh<_i150.MockRemoteDataSource>(),
         gh<_i13.ApiExpenseDataSource>(),
+      ),
+    );
+    gh.factory<_i402.IExpenseExportRepository>(
+      () => _i709.ExpenseExportRepositoryImpl(
+        gh<_i368.ExpenseExportDataSource>(),
       ),
     );
     gh.factory<_i493.IUploadMediaRepository>(
@@ -121,14 +146,21 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1062.UploadMediaCubit>(
       () => _i1062.UploadMediaCubit(gh<_i1028.UploadMediaUseCase>()),
     );
+    gh.factory<_i167.ExportExpensesUseCases>(
+      () => _i167.ExportExpensesUseCases(gh<_i402.IExpenseExportRepository>()),
+    );
     gh.factory<_i72.ExpenseUseCases>(
       () => _i72.ExpenseUseCases(gh<_i522.IExpenseRepository>()),
     );
-    gh.factory<_i618.ExpensesCubit>(
-      () => _i618.ExpensesCubit(gh<_i72.ExpenseUseCases>()),
+    gh.factory<_i913.ExportCubit>(
+      () =>
+          _i913.ExportCubit(exportUseCase: gh<_i167.ExportExpensesUseCases>()),
     );
     gh.factory<_i882.AddExpenseCubit>(
       () => _i882.AddExpenseCubit(gh<_i72.ExpenseUseCases>()),
+    );
+    gh.factory<_i618.ExpensesCubit>(
+      () => _i618.ExpensesCubit(gh<_i72.ExpenseUseCases>()),
     );
     return this;
   }

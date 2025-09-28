@@ -8,6 +8,7 @@ import '../../features/expense/presentation/bloc/category_logic/category_cubit.d
 import '../../features/expense/presentation/bloc/expenses_logic/expenses_cubit.dart';
 import '../features/bottom_nav_feature/presentation/bloc/bottom_nav_cubit.dart';
 import '../features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart';
+import '../features/export_files_feature/presentation/bloc/export_cubit.dart';
 import '../features/upload_media_featue/presentation/bloc/upload_media_cubit.dart';
 
 class MultiBlocProvidersPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _MultiBlocProvidersPageState extends State<MultiBlocProvidersPage> {
         ),
         BlocProvider<BottomNavCubit>(create: (_) => getIt<BottomNavCubit>()),
         BlocProvider<CategoryCubit>(create: (_) => getIt<CategoryCubit>()),
+        BlocProvider<ExportCubit>(create: (_) => getIt<ExportCubit>()),
         BlocProvider<UploadMediaCubit>(
           create: (_) => getIt<UploadMediaCubit>(),
         ),

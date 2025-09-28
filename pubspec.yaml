@@ -82,6 +82,10 @@ dependencies:
   # Alerts
   another_flushbar: ^1.12.32
 
+  # Export
+  csv: ^6.0.0
+  pdf: ^3.11.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
