@@ -26,7 +26,7 @@ class DashboardExpenseListView extends StatelessWidget {
           return CommonError(
             errorMassage: state.error,
             withButton: true,
-            onTap: () => cubit.getExpensesList(),
+            onTap: () => cubit.getLastCounted(),
           );
         } else if (state is DashboardExpenseLoading) {
           return ListLoaderWidget(

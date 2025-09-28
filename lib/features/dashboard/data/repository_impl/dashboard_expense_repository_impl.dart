@@ -3,6 +3,7 @@ import 'package:expense_tracker_lite/core/network/error_handling/custom_error.da
 import 'package:expense_tracker_lite/features/expense/data/models/expense_model.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/constants/enums/date_filter.dart';
 import '../../domain/repository/dashboard_expense_repository.dart';
 import '../ds/mock_dashboard_expense_ds.dart';
 
@@ -13,8 +14,16 @@ class DashboardExpenseRepositoryImpl implements IDashboardExpenseRepository {
   DashboardExpenseRepositoryImpl(this._mockRemoteDataSource);
 
   @override
-  Future<Either<CustomError, List<ExpenseModel>>> getLastCounted() async {
-    final result = await _mockRemoteDataSource.getLastCounted();
+  Future<Either<CustomError, List<ExpenseModel>>> getLastCounted({
+    int take = 4,
+    DateFilter? filter,
+    DateTime Function(dynamic)? getDate,
+  }) async {
+    final result = await _mockRemoteDataSource.getLastCounted(
+      take: take,
+      filter: filter,
+      getDate: getDate,
+    );
 
     return right(result);
   }

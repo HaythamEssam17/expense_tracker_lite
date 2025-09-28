@@ -49,7 +49,7 @@ class AddExpenseHomePage extends StatelessWidget {
           if (state is AddExpenseAddedSuccess) {
             router.pop();
 
-            context.read<DashboardExpenseCubit>().getExpensesList();
+            context.read<DashboardExpenseCubit>().getLastCounted();
             BlocProvider.of<ExpensesCubit>(context).getExpensesList();
           } else if (state is AddExpenseAddedFailed) {
             router.pop();
@@ -128,7 +128,7 @@ class AddExpenseHomePage extends StatelessWidget {
                                       'MM/dd/yyyy',
                                     ).format(date);
 
-                                    cubit.setDate(formattedDate);
+                                    cubit.setDate(formattedDate, date);
                                   });
                                 },
                                 child: AbsorbPointer(

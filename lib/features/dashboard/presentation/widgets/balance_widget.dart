@@ -80,7 +80,7 @@ class BalanceCard extends StatelessWidget {
 
           /// Total Balance Value
           CommonText(
-            '\$ ${balanceModel.totalBalance}',
+            '\$ ' + balanceModel.totalBalance.floor().toStringAsFixed(2),
             color: context.textColors.white,
             fontSize: 30,
             fontFamily: Fonts.cairoBold,
@@ -95,13 +95,17 @@ class BalanceCard extends StatelessWidget {
                 context,
                 icon: Icons.arrow_downward_rounded,
                 title: "Income",
-                value: '\$ ${balanceModel.incomeBalance}',
+                value:
+                    '\$ ' +
+                    balanceModel.incomeBalance.floor().toStringAsFixed(2),
               ),
               _buildStatItem(
                 context,
                 icon: Icons.arrow_upward_rounded,
                 title: "Expense",
-                value: '\$ ${balanceModel.expenseBalance}',
+                value:
+                    '\$ ' +
+                    balanceModel.expenseBalance.floor().toStringAsFixed(2),
               ),
             ],
           ),

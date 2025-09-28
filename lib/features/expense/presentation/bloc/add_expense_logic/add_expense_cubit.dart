@@ -52,9 +52,9 @@ class AddExpenseCubit extends Cubit<AddExpenseStates> {
     emit(AddExpenseInit());
   }
 
-  void setDate(String value) {
+  void setDate(String value, DateTime date) {
     addExpenseForm.dateController.text = value;
-    expense.date = DateTime.now();
+    expense.date = date;
     emit(AddExpenseInit());
   }
 

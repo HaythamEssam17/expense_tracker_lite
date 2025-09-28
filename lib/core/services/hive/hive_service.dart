@@ -3,6 +3,7 @@ import 'package:hive_flutter/adapters.dart';
 
 import '../../../features/dashboard/data/models/balance_model.dart';
 import '../../../features/expense/data/models/category_model.dart';
+import '../../constants/enums/date_filter.dart';
 import '../../constants/local_keys.dart';
 import '../service_provider.dart';
 
@@ -67,8 +68,19 @@ class HiveServiceProvider<T> implements ServiceProvider {
   }
 
   /// Get last counted items
-  Future<List> getLastCounted<T>(Box box, int take) async {
-    final values = box.values.toList();
+  Future<List> getLastCounted<T>(
+    Box box,
+    int take, {
+    DateFilter? filter,
+    DateTime Function(dynamic)? getDate,
+  }) async {
+    var values = box.values.toList();
+
+    DateFilter df = filter ?? DateFilter.today;
+    DateTime Function(dynamic)? date = getDate ?? (item) => DateTime.now();
+
+    values = applyDateFilter(values, df, date);
+
     if (values.length <= take) return values;
     return values.sublist(values.length - take);
   }
@@ -83,22 +95,51 @@ class HiveServiceProvider<T> implements ServiceProvider {
     Box box, {
     int page = 1,
     int limit = 10,
+    DateFilter? filter,
+    DateTime Function(dynamic)? getDate,
   }) async {
-    final all = box.values.toList();
+    var all = box.values.toList();
+
+    DateFilter df = filter ?? DateFilter.today;
+    DateTime Function(dynamic)? date = getDate ?? (item) => DateTime.now();
+
+    all = applyDateFilter(all, df, date);
+
     final startIndex = (page - 1) * limit;
     if (startIndex >= all.length) return [];
+
     final endIndex = startIndex + limit;
-    var list = all.sublist(
+    var result = all.sublist(
       startIndex,
       endIndex > all.length ? all.length : endIndex,
     );
 
-    return list;
+    return result;
   }
 
   /// Get item by key
-  Future<T?> getByKey<T>(Box box, dynamic key) async {
-    return box.get(key);
+  // Future<T?> getByKey<T>(Box box, dynamic key) async {
+  //   return box.get(key);
+  // }
+
+  Future<T?> getByKey<T>(
+    Box box,
+    dynamic key, {
+    DateFilter filter = DateFilter.all,
+    DateTime Function(dynamic)? getDate,
+  }) async {
+    final item = box.get(key);
+
+    if (item == null) return null;
+
+    if (filter == DateFilter.all) return item;
+
+    DateTime Function(dynamic)? date = getDate ?? (item) => DateTime.now();
+
+    final values = [item as T];
+    final filtered = applyDateFilter<T>(values, filter, date);
+
+    return filtered.isNotEmpty ? filtered.first : null;
   }
 
   /// Update item
@@ -119,5 +160,40 @@ class HiveServiceProvider<T> implements ServiceProvider {
   /// Count
   Future<int> count(Box box) async {
     return box.length;
+  }
+
+  List<T> applyDateFilter<T>(
+    List<T> values,
+    DateFilter filter,
+    DateTime Function(T) getDate,
+  ) {
+    final now = DateTime.now();
+
+    switch (filter) {
+      case DateFilter.today:
+        return values.where((item) {
+          final date = getDate(item);
+          return date.year == now.year &&
+              date.month == now.month &&
+              date.day == now.day;
+        }).toList();
+
+      case DateFilter.thisWeek:
+        final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+        return values.where((item) {
+          final date = getDate(item);
+          return date.isAfter(startOfWeek) ||
+              date.isAtSameMomentAs(startOfWeek);
+        }).toList();
+
+      case DateFilter.thisMonth:
+        return values.where((item) {
+          final date = getDate(item);
+          return date.year == now.year && date.month == now.month;
+        }).toList();
+
+      case DateFilter.all:
+        return values;
+    }
   }
 }

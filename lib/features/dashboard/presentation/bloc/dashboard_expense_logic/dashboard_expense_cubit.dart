@@ -3,6 +3,7 @@ import 'package:expense_tracker_lite/features/dashboard/domain/usecases/dashboar
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../core/constants/enums/date_filter.dart';
 import '../../../../../core/services/hive/hive_service.dart';
 import '../../../../expense/data/models/expense_model.dart';
 
@@ -11,21 +12,35 @@ part 'dashboard_expense_states.dart';
 @Injectable()
 class DashboardExpenseCubit extends Cubit<DashboardExpenseStates> {
   DashboardExpenseCubit(this._expenseUseCases) : super(DashboardExpenseInit()) {
-    getExpensesList();
+    getLastCounted();
   }
 
   final DashboardExpenseUseCase _expenseUseCases;
 
+  final HiveServiceProvider _hiveServiceProvider = HiveServiceProvider.i;
+
   List<ExpenseModel> expensesList = [];
 
-  getExpensesList() async {
+  getLastCounted<T>({
+    int take = 4,
+    DateFilter? filter,
+    DateTime Function(dynamic)? getDate,
+  }) async {
     emit(DashboardExpenseLoading());
 
-    var result = await _expenseUseCases.getLastCounted();
+    var result = await _expenseUseCases.getLastCounted(
+      take: take,
+      filter: filter,
+      getDate: getDate,
+    );
 
     result.fold((error) => emit(DashboardExpenseFailed(error.errorMassage!)), (
       data,
     ) {
+      if (getDate != null) {
+        getBalances(getDate: getDate);
+      }
+
       if (data.isEmpty) {
         emit(DashboardExpensesEmpty());
       } else {
@@ -36,11 +51,14 @@ class DashboardExpenseCubit extends Cubit<DashboardExpenseStates> {
     });
   }
 
-  final HiveServiceProvider _hiveServiceProvider = HiveServiceProvider.i;
-  Future<BalanceModel> getBalances() async {
+  Future<BalanceModel> getBalances<T>({
+    DateTime Function(dynamic)? getDate,
+  }) async {
     var balances = await _hiveServiceProvider.getByKey(
       _hiveServiceProvider.balancesBox,
       "main",
+      filter: DateFilter.all,
+      getDate: getDate,
     );
     Map<String, dynamic> map = {
       "totalBalance": balances['totalBalance'],
