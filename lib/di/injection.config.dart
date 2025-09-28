@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:connectivity_plus/connectivity_plus.dart' as _i895;
+import 'package:dio/dio.dart' as _i361;
 import 'package:expense_tracker_lite/core/features/bottom_nav_feature/presentation/bloc/bottom_nav_cubit.dart'
     as _i969;
 import 'package:expense_tracker_lite/core/features/connectivity_feature/presentation/logic/connectivity_cubit/connectivity_cubit.dart'
@@ -24,7 +25,9 @@ import 'package:expense_tracker_lite/core/features/upload_media_featue/domain/us
     as _i1028;
 import 'package:expense_tracker_lite/core/features/upload_media_featue/presentation/bloc/upload_media_cubit.dart'
     as _i1062;
+import 'package:expense_tracker_lite/core/network/dio_client.dart' as _i230;
 import 'package:expense_tracker_lite/di/network_module.dart' as _i903;
+import 'package:expense_tracker_lite/di/register_module.dart' as _i180;
 import 'package:expense_tracker_lite/features/dashboard/data/ds/mock_dashboard_expense_ds.dart'
     as _i783;
 import 'package:expense_tracker_lite/features/dashboard/data/repository_impl/dashboard_expense_repository_impl.dart'
@@ -62,6 +65,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final networkModule = _$NetworkModule();
+    final registerModule = _$RegisterModule();
     gh.factory<_i969.BottomNavCubit>(() => _i969.BottomNavCubit());
     gh.factory<_i543.ConnectivityCubit>(() => _i543.ConnectivityCubit());
     gh.factory<_i1062.UploadMediaStates>(() => _i1062.UploadMediaStates());
@@ -73,6 +77,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i489.DashboardExpenseStates(),
     );
     gh.lazySingleton<_i895.Connectivity>(() => networkModule.connectivity);
+    gh.lazySingleton<_i361.Dio>(() => registerModule.dio());
     gh.factory<_i13.ApiExpenseDataSource>(
       () => _i13.ApiExpenseDataSourceImpl(),
     );
@@ -81,6 +86,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i783.MockDashboardExpenseDatsSource>(
       () => _i783.MockDashboardExpenseDatsSourceImpl(),
+    );
+    gh.lazySingleton<_i230.DioHelper>(
+      () => registerModule.dioHelper(gh<_i361.Dio>()),
     );
     gh.factory<_i401.UploadMediaDataSource>(
       () => _i401.UploadMediaDataSourceImpl(),
@@ -127,3 +135,5 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$NetworkModule extends _i903.NetworkModule {}
+
+class _$RegisterModule extends _i180.RegisterModule {}

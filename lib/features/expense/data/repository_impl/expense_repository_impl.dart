@@ -72,12 +72,14 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
   }) async {
     return await _apiExpenseDataSource.addExpense(expenses).then((value) async {
       if (value.isRight() && value.getOrElse(() => false)) {
+        double? usdAmount = await getExchangeRate(expenses.amount ?? 0, 'EGP');
+        expenses.usdAmount = usdAmount;
+
         await _hiveServiceProvider.insert(
           _hiveServiceProvider.expenseBox,
           expenses.toJson(),
         );
-        // await addExpense(expenses);
-        await addBalances(expenses.amount ?? 10.0, isExpense: isExpense);
+        await addBalances(expenses.usdAmount ?? 0, isExpense: isExpense);
         return true;
       } else {
         return false;
@@ -106,5 +108,20 @@ class ExpenseRepositoryImpl implements IExpenseRepository {
           "expenseBalance": currentBalance['expenseBalance'],
           "incomeBalance": currentBalance['incomeBalance'],
         });
+  }
+
+  Future<double?> getExchangeRate(double amount, String currencyCode) async {
+    return await _apiExpenseDataSource.getExchangeRate(currencyCode).then((
+      rate,
+    ) {
+      double? amountInUsd;
+      if (rate != null && rate > 0) {
+        amountInUsd = amount / rate;
+      } else {
+        amountInUsd = null;
+      }
+
+      return amountInUsd;
+    });
   }
 }
